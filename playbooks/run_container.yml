@@ -1,5 +1,14 @@
 ---
 - hosts: azure_vm
   become: yes
-  roles:
-    - docker_container
+  tasks:
+    - name: Ejecutar Mario Bros
+      docker_container:
+        name: supermario-container
+        image: "pengbai/docker-supermario:latest"
+        state: started
+        ports:
+          - "8787:8080"
+        published_ports:
+          - "8787:8080"
+        restart_policy: always
