@@ -1,16 +1,13 @@
 # training-ansible
 
-## Instalar docker:
+### Archivos modificados:
 
-`ANSIBLE_HOST_KEY_CHECKING=False ANSIBLE_ROLES_PATH=./roles ansible-playbook -i inventory/hosts.ini playbooks/install_docker.yml`
+- "hosts.ini": se puso la dirección IP de la VM que estaba corriendo y las credenciales para acceder a esta.
+- "run_container.yml": se definió una tarea para levantar el contenedor junto con la imágen correspondiente y los puertos asignados.
 
-## Correr contenedor:
-`ANSIBLE_HOST_KEY_CHECKING=False ANSIBLE_ROLES_PATH=./roles ansible-playbook -i inventory/hosts.ini playbooks/run_container.yml`
-
-
-## Permisos de puerto:
-
-`az network nsg rule create \
+## Actualizacion de permisos de puertos de la VM:
+```
+az network nsg rule create \
   --resource-group win-vm-iis-goldfish-rg \
   --nsg-name win-vm-iis-goldfish-nsg \
   --name AllowSSH \
@@ -21,9 +18,11 @@
   --source-port-range '*' \
   --destination-port-range 22 \
   --source-address-prefix '*' \
-  --destination-address-prefix '*'`
+  --destination-address-prefix '*'
+```
 
-  `az network nsg rule create \
+```
+az network nsg rule create \
   --resource-group win-vm-iis-goldfish-rg \
   --nsg-name win-vm-iis-goldfish-nsg \
   --name Allow-Mario \
@@ -31,7 +30,18 @@
   --priority 1002 \
   --destination-port-range 8787 \
   --access Allow \
-  --direction Inbound`
+  --direction Inbound
+```
+
+## Instalar docker:
+
+`ANSIBLE_HOST_KEY_CHECKING=False ANSIBLE_ROLES_PATH=./roles ansible-playbook -i inventory/hosts.ini playbooks/install_docker.yml`
+
+## Correr contenedor:
+`ANSIBLE_HOST_KEY_CHECKING=False ANSIBLE_ROLES_PATH=./roles ansible-playbook -i inventory/hosts.ini playbooks/run_container.yml`
+
+
+
 
 ## Consola de la VM:
 
